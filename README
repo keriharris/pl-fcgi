@@ -1,0 +1,54 @@
+pl-fcgi - a FastCGI library for Prolog
+======================================
+
+pl-fcgi is suited for CGI applications written in Prolog as it can provide substantial performance gains. Standard Prolog CGI applications must load the Prolog interpreter and parse the CGI script upon each invocation; with pl-fcgi the interpreter is loaded once and the script is parsed once.
+
+A typical pl-fcgi script contains the following sections:
+
+1. initialization section
+
+This section contains startup code called before servicing any clients requests.
+
+2. request-loop section
+
+The request-loop is typically written as:
+
+	forall(fcgi_accept,
+	       ( % code to process request
+	         ...
+               )
+	      ).
+
+pl-fcgi applications, like standard CGI applications use the standard POSIX streams (stdin, stdout, stderr) to communicate with the HTTP server.
+
+Prolog code written using pl-fcgi predicates will work both as standalone CGI scripts and with FastCGI servers. The pl-fcgi library automatically detects whether the script is running under a FastCGI server or as a standalone CGI script.
+
+
+pl-fcgi example
+---------------
+
+The following example illustrates how a single invocation of a Prolog interpreter is used to service multiple client requests.
+
+
+#!/usr/local/bin/swipl
+
+:-use_module(library(fcgi)).
+
+service_requests :-
+	forall(fcgi_accept,
+	       service_request).
+
+service_request :-
+	flag(count, N, N+1),
+	current_prolog_flag(pid, PID),
+
+	format('Content-type: text/html\n\n', []),
+	format('<title>fcgi example</title>\n', []),
+	format('<h1>fcgi example</h1>\n', []),
+	format('Request number: ~w, Process ID: ~w\n', [N, PID]),
+	forall(fcgi_param(Name, Value),
+	       format('<p>~w=~w</p>\n', [Name, Value])),
+
+	fcgi_finish.
+
+:- service_requests.
