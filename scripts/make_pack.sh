@@ -31,8 +31,8 @@ cd $SCRIPTDIR
 rm -rf pack-$VERSION
 
 mkdir -p $PACKDIR
-echo "name('pl-fcgi')." > $PACKDIR/pack.pl
-echo "title('pl-fcgi - Fast Common Gateway Interface (FastCGI)')." >> $PACKDIR/pack.pl
+echo "name('fcgi')." > $PACKDIR/pack.pl
+echo "title('fcgi - Fast Common Gateway Interface (FastCGI) library for Prolog')." >> $PACKDIR/pack.pl
 echo "version('$VERSION')." >> $PACKDIR/pack.pl
 echo "author('Keri Harris', 'keri@gentoo.org')." >> $PACKDIR/pack.pl
 echo "download('http://dev.gentoo.org/~keri/pl-fcgi/fcgi-*.tgz')." >> $PACKDIR/pack.pl
