@@ -24,8 +24,8 @@ service_request :-
 	forall(fcgi_param(Name, Value),
 	       format('<p>~w=~w</p>\n', [Name, Value])),
 
-	fcgi_param('CONTENT_LENGTH', ContentLengthAtom),
-	(   atom_number(ContentLengthAtom, ContentLength)
+	(   fcgi_param('CONTENT_LENGTH', ContentLengthAtom),
+	    atom_number(ContentLengthAtom, ContentLength)
 	->  true
 	;   ContentLength = 0
 	),
