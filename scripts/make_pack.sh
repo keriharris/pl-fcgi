@@ -27,6 +27,9 @@ TOPDIR=$SCRIPTDIR/..
 VERSION=$(cat $TOPDIR/VERSION)
 PACKDIR=pack-$VERSION/fcgi
 
+cd $TOPDIR
+make distclean
+
 cd $SCRIPTDIR
 rm -rf pack-$VERSION
 
@@ -44,9 +47,9 @@ mkdir -p $PACKDIR/src
 cp $TOPDIR/src/fcgi.c $PACKDIR/src/
 cp $TOPDIR/src/config.h.in $PACKDIR/src/
 cp $TOPDIR/src/Makefile.in $PACKDIR/src/
-sed -i -e "s:@SWI_SOLIBDIR@:../\$(PACKSODIR):" \
-       -e "s:@SWI_PLLIBDIR@:../prolog:" \
-       -e "/\$(INSTALL_PROGRAM)/{h;N;N;N;N;N;x}" $PACKDIR/src/Makefile.in
+sed -i -e "s:\(INSTALL_SOLIBDIR\)=.*:\1=../\$(PACKSODIR):" \
+       -e "s:\(INSTALL_PLLIBDIR\)=.*:\1=../prolog:" \
+       -e "/\$(INSTALL_PROGRAM)/{h;N;N;x}" $PACKDIR/src/Makefile.in
 
 mkdir -p $PACKDIR/examples
 cp $TOPDIR/examples/*.fcgi $PACKDIR/examples/
@@ -57,11 +60,7 @@ cp $TOPDIR/LICENSE $PACKDIR/
 cp $TOPDIR/VERSION $PACKDIR/
 
 cp $TOPDIR/configure.in $PACKDIR/
-sed -i -e "/SWI_BASE/d" \
-       -e "/SWI_ARCH/d" \
-       -e "/SWI_SOLIBDIR/d" \
-       -e "/SWI_PLLIBDIR/d" \
-       -e "/PKG_CHECK_MODULES(SWI/{N;N;d}" $PACKDIR/configure.in
+sed -i -e "/PKG_CHECK_MODULES(SWI/{N;N;d}" $PACKDIR/configure.in
 cp $TOPDIR/aclocal.m4 $PACKDIR/
 cp $TOPDIR/install-sh $PACKDIR/
 cp $TOPDIR/Makefile.in $PACKDIR/

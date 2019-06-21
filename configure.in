@@ -21,11 +21,6 @@ PKG_CHECK_MODULES(SWI,
     swipl
 )
 
-SWI_BASE=$($PKG_CONFIG --variable=PLBASE swipl)
-SWI_ARCH=$($PKG_CONFIG --variable=PLARCH swipl)
-SWI_SOLIBDIR=$SWI_BASE/lib/$SWI_ARCH
-SWI_PLLIBDIR=$SWI_BASE/library
-
 AC_CHECK_LIB(fcgi, main)
 if test "$ac_cv_lib_fcgi_main" != "yes"; then
     AC_MSG_ERROR([unable to find the fcgi library])
